@@ -255,9 +255,9 @@ import Header from '@/components/header.vue'
           color: #fff;
           padding-left: 70px !important;
       }
-      .el-menu-item-group .is-active{
+    //   .el-menu-item-group .is-active{
           // background-color: #3e7ab6;
-      }
+    //   }
       :deep(.el-sub-menu__title){
             color: #fff;
      }
