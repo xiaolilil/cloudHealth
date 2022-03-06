@@ -15,7 +15,7 @@
     </ul>
 
     <hr class="hr">
-    <el-button class="edit" type="primary" @click="showEdit">修改个人信息</el-button>
+    <el-button class="edit" type="primary" @click="showEdit">修改信息</el-button>
   </div>
 
   <el-dialog v-model="showEditFlag" title="修改信息" width="30%">

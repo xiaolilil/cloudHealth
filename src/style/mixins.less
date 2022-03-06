@@ -1,18 +1,37 @@
-.wh(@width, @height){
+  .wh(@width, @height){
     width: @width;
     height: @height;
   }
-  
+
+  .whs(@width, @height){
+    width: @width;
+    height: @height;
+    line-height: @height;
+  }
+
   // //字体大小，颜色
   .sc(@size, @color){
     font-size: @size;
     color: @color;
   }
 
-  .fj(@type: space-between, @type2:center){
+  .flex(){
+    display:flex;
+    align-items: center;
+  }
+
+
+  .fr(@type: space-between, @type2:center){
     display: flex;
     justify-content: @type;
     align-items: @type2;
+  }
+
+  .fc(@data:space-between, @data2:center){
+    display: flex;
+    flex-direction: column;
+    justify-content: @data;
+    align-items: @data2;
   }
 
 

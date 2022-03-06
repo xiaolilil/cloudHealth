@@ -1,19 +1,22 @@
 <template>
-  <Header />
-
-    <el-container class="home">
-      <el-aside class="aside" :class="[isCollapse == true ? 'col' : '']" >
+    
+    <Header v-if="this.$store.state.user.userInfo.roles == 'admin'" />
+    <UserHeader v-else />
+    <el-container class="home" ref="home">
+      <el-aside 
+              class="aside" :style="{height:asideHeight}"  
+              :class="[isCollapse == true ? 'col' : '']"
+              v-if="this.$store.state.user.userInfo.roles == 'admin'" >
         <el-scrollbar>
           <div class="op-cl" @click="zhedie">| | |</div>
           <el-menu
             :unique-opened="true"
             :default-openeds="['0']"
-            router=""
             :default-active="activePath"
             :collapse="isCollapse"
-            v-for="(v, i) in welcome" :key="v.id"
+            v-for="(v, i) in this.$store.state.permission.clientMenus" :key="v.id"
           >
-            <el-sub-menu :index="'i'">
+            <el-sub-menu :index="'i'" >
               <template #title>
                 <i class="icon" :class="iconsObj[v.id]"></i>
                 <span>{{ v.authName }}</span>
@@ -22,17 +25,21 @@
                 <el-menu-item
                   index=""
                   :class="[activeClass == o.path ? 'activeClass' : '']"
-                  @click="activeItem('/' + o.path, o.path, $event)"
-                  >{{ o.authName }}</el-menu-item
-                >
+                  @click="activeItem(o.path)"
+                  >{{ o.title }}</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
-
           </el-menu>
         </el-scrollbar>
       </el-aside>
       <el-main>
-        <router-view></router-view>
+         
+
+
+
+          <div v-if="!this.$store.state.isHome">
+            <router-view></router-view>
+          </div>
       </el-main>
     </el-container>
 
@@ -40,17 +47,26 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import { reactive ,ref } from 'vue'
+import { reactive ,ref,onMounted } from 'vue'
 import { getCurrentInstance } from 'vue'
+import UserHeader from '@/components/header/user-header.vue'
 import Header from '@/components/header.vue'
-
+// import store from '@/store'
+import { useStore,  } from 'vuex'
     components:{
+        UserHeader,
         Header
     }
+    const home = ref(null);
+    let asideHeight;
+    onMounted(() => {
+        // 获取元素的总高度
+         asideHeight = home.value.$el.offsetHeight;
+    })
 
     const router = useRouter();
     const { proxy } = getCurrentInstance();// ctx中有问题，建议使用proxy中获取 
-
+    const internalInstance = getCurrentInstance() // 有效
     // 折叠菜单栏
     let isCollapse = ref(false);
     const zhedie = () => {
@@ -83,6 +99,13 @@ import Header from '@/components/header.vue'
           id: 123,
           order: 1,
           path: "healthtype",
+          children: [],
+        },
+        {
+          authName: "实时天气", 
+          id: 123,
+          order: 1,
+          path: "weather",
           children: [],
         },
       ],
@@ -186,17 +209,20 @@ import Header from '@/components/header.vue'
     ] 
 
 
-    const activeClass = ref('health');
+
+    // console.log()
+
+
+    const activeClass = ref('');
     activeClass.value = window.sessionStorage.getItem("active");
     const activePath = ref('');
-    const activeItem = (i, idx, e) => {
-      activeClass.value = idx;
-      activePath.value = idx;
-      router.push( i);
-      window.sessionStorage.setItem("active", activeClass.value);
-    // console.log(i)
+    const activeItem = (val) => {
+      // console.log(i,idx)
+      activeClass.value = val;
+      activePath.value = val;
+      router.push(val);
+      window.sessionStorage.setItem("active", val);
     }
-
 
 
 </script>
@@ -204,9 +230,13 @@ import Header from '@/components/header.vue'
 <style lang="less" scoped>
 @import "../../style/mixins.less";
 
+section{
+    height: 100%;
+}
       .home{
           display:flex;
           height: 100%;
+          min-height: calc(100vh - 66px);
           overflow-y: hidden;
           .col{
             width: 60px ;
@@ -215,7 +245,7 @@ import Header from '@/components/header.vue'
       }
      :deep(.el-aside)  {
         width: 200px ;
-        height: calc(100vh - 60px);
+        // height: calc(100vh - 60px);
         overflow-y: hidden;
         color: var(--el-text-color-primary);
         background: rgb(164, 110, 214) !important;
@@ -238,6 +268,16 @@ import Header from '@/components/header.vue'
         font-size: 20px;
         margin-right: 10px;
       }
+      .menu{
+        line-height: 50px !important;
+        text-align: center;
+        background-color:  rgb(133, 99, 165) !important;
+        
+      }
+      .menu:hover{
+        background-color: rgb(75, 53, 110) !important;
+        color: #409eff !important;
+      }
       :deep(.el-menu) {
         border-right: none;
         background-color: rgb(133, 99, 165) !important;
@@ -247,6 +287,8 @@ import Header from '@/components/header.vue'
         background-color:  rgb(75, 53, 110) !important;
       }
       .activeClass{
+        line-height: 50px;
+        text-align: center;
         background-color: rgb(75, 53, 110);
         color: #409eff !important;
       }
@@ -274,10 +316,8 @@ import Header from '@/components/header.vue'
       }
 
       :deep(.el-main){
-        padding: 20px;
-        // height: calc(100% - 60px);
-        // height: 100%;
-        // background-color: rgb(134, 99, 167);
+        // padding: 20px;
+        height: calc(100% - 60px);
       }
       .toolbar {
         position: absolute;
@@ -287,4 +327,5 @@ import Header from '@/components/header.vue'
         right: 20px;
         transform: translateY(-50%);
       }
+
 </style>

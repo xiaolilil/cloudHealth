@@ -47,7 +47,10 @@ import { CanvasRenderer } from 'echarts/renderers';
         },
         legend: {
             top: '5%',
-            left: 'center'
+            left: 'center',
+            textStyle:{
+                color:'#fff'
+            },
         },
         series: [
             {
@@ -75,7 +78,7 @@ import { CanvasRenderer } from 'echarts/renderers';
                 show: false
             },
             data: [
-                { value: 1048, name: '亚健康' },
+                { value: 1048, name: '亚健康', },
                 { value: 735, name: '高血压' },
                 { value: 580, name: '健康' },
                 { value: 484, name: '眼疲劳' },

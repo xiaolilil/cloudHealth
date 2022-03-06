@@ -22,8 +22,16 @@
                 height: 30
               }
             },
-            { name: '北京', coordinate: [0.65, 0.40] },
-            { name: '上海', coordinate: [0.71, 0.62] },
+            { name: '北京', coordinate: [0.65, 0.40],
+              halo: {
+                show: true,
+                color: '#8378ea'
+              } },
+            { name: '上海', coordinate: [0.71, 0.62],
+              halo: {
+                show: true,
+                color: '#8378ea'
+              } },
             { name: '南京', coordinate: [0.68, 0.59] },
             { name: '广州', coordinate: [0.61, 0.80] },
             { name: '黑龙江', coordinate: [0.75, 0.23] },
@@ -32,8 +40,16 @@
             { name: '青海', coordinate: [0.38, 0.50] },
             { name: '西藏', coordinate: [0.25, 0.62] },
             { name: '内蒙古', coordinate: [0.51, 0.39] },
-            { name: '呼和浩特', coordinate: [0.19, 0.43] },
-            { name: '海南', coordinate: [0.56, 0.88] },
+            { name: '呼和浩特', coordinate: [0.19, 0.43],
+              halo: {
+                show: true,
+                color: '#8378ea'
+              } },
+            { name: '海南', coordinate: [0.56, 0.88],
+              halo: {
+                show: true,
+                color: '#8378ea'
+              } },
             { name: '武汉', coordinate: [0.54, 0.65] },
             // { name: '四川', coordinate: [0.46, 0.61] },
           ],

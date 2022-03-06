@@ -33,16 +33,48 @@
         <span class="iconfont "></span>
         <ul>
             <li>绑定第三方账号</li>
-            <li >
+            <li class="other" @click="dialog">
                 <i class="iconfont icon-logo-wechat"></i>
                 <i class="iconfont icon-QQ-circle-fill"></i>
                 <i class="iconfont icon-logo-weibo"></i>
                 <i class="iconfont icon-zhifubao"></i>
             </li>
         </ul>
-        <p>更改</p>
     </div>
  </div>
+
+    <!-- 修改手机号 -->
+    <el-dialog
+        v-model="editBox"
+        title="身份验证"
+        width="40%"
+    >
+        <p class="title">为了您的账户安全,请验证身份。验证成功后进行下一步操作。</p>
+        <el-form ref="editformRef" :model="editForm" :rules="rules" label-width="120px">
+            <el-form-item >
+                <el-select  placeholder="使用 132****3568 验证">
+                    <el-option label="Zone one" value="test">使用 132****3568 验证</el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item prop="verfication">
+                <input class="ipt" v-model="editForm.verfication" placeholder="6位验证码" />
+                 <el-button class="btn" v-if="flag == '获取验证码'" @click="getNum">{{flag }}</el-button>
+                 <el-tag v-else>{{flag}}秒</el-tag>
+            </el-form-item>
+            <el-form-item prop="mobile">
+                <input class="ipt ipt2" v-model="editForm.mobile" placeholder="请输入手机号" />
+            </el-form-item>
+            <div class="elbd">
+                <el-button @click="editBox = false">取消</el-button>
+                <el-button type="primary" @click="toValidate(editformRef)">确定</el-button>
+            </div>
+        </el-form>
+    </el-dialog>
+
+
+
+
+
 </template>
 
 <script setup>
@@ -57,9 +89,52 @@ import { getCurrentInstance } from 'vue'
         password:'******',
 
     }
-    const edit = (v) => {
-        console.log(v)
+    const flag = ref('获取验证码');
+    const editBox = ref(false);
+    const editformRef = ref(null)
+    const editForm = {
+        verfication:'',
+        mobile:'',
     }
+    const rules = {
+        verfication :[{ required: true, message: '请输入验证码',trigger: 'blur'}],
+        mobile :[{ required: true, message: '请输入手机号',trigger: 'blur'}],
+    }
+    const edit = (v) => {
+        if(v == 'mobile')editBox.value = true;
+    }
+    
+    const getNum = () => {
+        console.log(flag.value)
+        if(flag.value == '获取验证码'){
+            flag.value = 20;
+            setTimeout(() => {
+                proxy.$msg.success('验证码: 376298')
+            },3000)
+            let a = setInterval(() => {
+                flag.value --
+                if(flag.value == 0){ 
+                    flag.value = '获取验证码'
+                    clearInterval(a);
+                }
+            },1000)
+        }
+
+    }
+    const toValidate = (editformRef) => {
+        editformRef.validate(  (valid) => {
+            if(editForm.mobile.length != 0 && editForm.verfication.length != 0){
+                proxy.$msg.success('验证成功');
+                account.mobile = editForm.mobile;
+                editBox.value = false;
+            }
+        })
+    }
+
+    const dialog = () => {
+        proxy.$msg.info('暂不支持')
+    }
+
 
 
 
@@ -88,7 +163,7 @@ import { getCurrentInstance } from 'vue'
         margin-bottom: 20px;
         .fj();
         padding: 0 30px ;
-        .iconfont{
+        span{
             width: 30px;
             height: 30px;
             font-size: 30px;
@@ -102,6 +177,11 @@ import { getCurrentInstance } from 'vue'
         }
         p{
             width: 50px;
+            cursor: pointer;
+            &:hover{
+                color: blueviolet;
+                font-weight: bold;
+            }
         }
         ul{
             flex: 1;
@@ -110,23 +190,48 @@ import { getCurrentInstance } from 'vue'
                     font-weight: bold;
                 }
                 &:last-child{
-                    width: 70%;
+                    width: 50%;
                     color: rgb(99, 98, 98);
                 }
                 i{
                     font-style: normal;
-                    width: 30px;
-                    height: 30px;
                     color: #ccc;
                     font-size: 30px;
+                    margin-right: 20px;
+                    color: blueviolet;
+                    cursor: pointer;
                 }
-                // .iconfont{
-                    
-                // }
+
+            }
+            .other{
+                padding-top: 10px;
             }
         }
     }
 }
-
-
+.title{
+    margin-bottom: 10px;
+    padding-left: 9%;
+}
+.ipt{
+    width: 90px;
+    height: 28px;
+    outline: none;
+    padding-left: 5px;
+    margin-right: 19px;
+    border: 1px solid rgb(204, 193, 193);
+    border-radius: 3px;
+}
+.ipt2{
+    width: 210px;
+}
+.el-tag{
+    .wh(102px, 32px);
+}
+.btn{
+    width: 102px;
+}
+.elbd{
+    text-align: right;
+}
 </style>

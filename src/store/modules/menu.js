@@ -1,5 +1,49 @@
 const state = {
-    menu: []
+    backstageMenus: [
+        {
+            authName: "用户管理",
+            id: 123,
+            order: 1,
+            path: "users",
+            name:'Users',
+            meta:{title:'用户管理'},
+            component:'',
+            children: [],
+          },
+    ],
+    expertMenus:[],
+    clientMenus:[
+              {
+                authName: "体质资料管理",
+                id: 123,
+                order: 1,
+                path: "physiquedata",
+                name:'PhysiqueData',
+                meta:{title:'体质资料管理'},
+                component:'',
+                children: [],
+              },
+              {
+                authName: "订单管理",
+                id: 124,
+                order: 1,
+                path: "order",
+                name:'Order',
+                meta:{title:'订单管理'},
+                component:'',
+                children: [],
+              },
+              {
+                authName: "问题咨询管理",
+                id: 125,
+                order: 1,
+                path: "issueconsult",
+                name:'IssueConsult',
+                meta:{title:'问题咨询管理'},
+                component:'',
+                children: [],
+              }
+    ]
 };
 
 const getters = {
@@ -17,7 +61,8 @@ const mutations = {
     },
     getMenu(state, payload){
         state.menu = payload; 
-    }
+    },
+    
 };
 
 const actions = {

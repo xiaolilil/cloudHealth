@@ -14,14 +14,13 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="router.push('/mycenter')">个人主页</el-dropdown-item>
-              <el-dropdown-item @click="router.push('/account')">账号设置</el-dropdown-item>
-              <el-dropdown-item @click="router.push('/cart')">购物车</el-dropdown-item>
+              <el-dropdown-item @click="push('mycenter')">个人主页</el-dropdown-item>
+              <el-dropdown-item @click="push('account')">账号设置</el-dropdown-item>
+              <el-dropdown-item @click="push('cart')">购物车</el-dropdown-item>
               <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      <!-- <el-button type="warning" >退出</el-button> -->
     </div>
     
   </el-container>
@@ -36,12 +35,11 @@ import { ArrowDown } from '@element-plus/icons-vue'
     const router = useRouter();
     const { proxy } = getCurrentInstance();// ctx中有问题，建议使用proxy中获取 
 
-    const toMyCenter = () => {
-      router.push('/mycenter')
+    const push = (v) => {
+      window.sessionStorage.setItem("active", v);
+      router.push('/'+ v)
     }
-    const toAccount = () => {
 
-    }
     const logout = () => {
       router.push('/login')
       proxy.$msg.info('退出成功')
@@ -89,6 +87,7 @@ import { ArrowDown } from '@element-plus/icons-vue'
 .right{
   display: flex;
   align-items: center;
+  cursor: pointer;
   .el-dropdown{
     width: 60px;
     height: 30px;
